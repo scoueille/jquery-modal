@@ -84,6 +84,8 @@
 
     open: function() {
       var m = this;
+      this.focusedElBeforeOpen = document.activeElement;
+      console.log(this.focusedElBeforeOpen);
       this.block();
       this.anchor.blur();
       if(this.options.doFade) {
@@ -108,6 +110,8 @@
       modals.pop();
       this.unblock();
       this.hide();
+      console.log(this.focusedElBeforeOpen);
+      this.focusedElBeforeOpen.focus();
       if (!$.modal.isActive())
         $(document).off('keydown.modal');
     },
@@ -115,7 +119,7 @@
     block: function() {
       this.$elm.trigger($.modal.BEFORE_BLOCK, [this._ctx()]);
       this.$body.css('overflow','hidden');
-      this.$blocker = $('<div class="' + this.options.blockerClass + ' blocker current"></div>').appendTo(this.$body);
+      this.$blocker = $('<div role="dialog" aria-modal="true" aria-labelledby="' + this.options.blockerTitle + '" class="' + this.options.blockerClass + ' blocker current"></div>').appendTo(this.$body);
       selectCurrent();
       if(this.options.doFade) {
         this.$blocker.css('opacity',0).animate({opacity: 1}, this.options.fadeDuration);
@@ -139,7 +143,7 @@
     show: function() {
       this.$elm.trigger($.modal.BEFORE_OPEN, [this._ctx()]);
       if (this.options.showClose) {
-        this.closeButton = $('<a href="#close-modal" rel="modal:close" class="close-modal ' + this.options.closeClass + '">' + this.options.closeText + '</a>');
+        this.closeButton = $('<a href="#close-modal" title="Fermer la fenêtre" rel="modal:close" class="close-modal ' + this.options.closeClass + '">' + this.options.closeText + '</a>');
         this.$elm.append(this.closeButton);
       }
       this.$elm.addClass(this.options.modalClass).appendTo(this.$blocker);
@@ -148,6 +152,7 @@
       } else {
         this.$elm.css('display', 'inline-block');
       }
+      this.$elm.find('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]').first().focus();
       this.$elm.trigger($.modal.OPEN, [this._ctx()]);
     },
 
@@ -204,10 +209,11 @@
     closeExisting: true,
     escapeClose: true,
     clickClose: true,
-    closeText: 'Close',
+    closeText: 'Fermer',
     closeClass: '',
     modalClass: "modal",
     blockerClass: "jquery-modal",
+    blockerTitle: "dialog-title",
     spinnerHtml: '<div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div>',
     showSpinner: true,
     showClose: true,
@@ -242,3 +248,4 @@
     $(this).modal();
   });
 }));
+
