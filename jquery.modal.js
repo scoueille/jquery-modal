@@ -85,7 +85,6 @@
     open: function() {
       var m = this;
       this.focusedElBeforeOpen = document.activeElement;
-      console.log(this.focusedElBeforeOpen);
       this.block();
       this.anchor.blur();
       if(this.options.doFade) {
@@ -110,7 +109,6 @@
       modals.pop();
       this.unblock();
       this.hide();
-      console.log(this.focusedElBeforeOpen);
       this.focusedElBeforeOpen.focus();
       if (!$.modal.isActive())
         $(document).off('keydown.modal');
@@ -152,7 +150,7 @@
       } else {
         this.$elm.css('display', 'inline-block');
       }
-      this.$elm.find('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]').first().focus();
+      this.$elm.find('a[href], area[href], input[type!="hidden"]:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]').first().focus();
       this.$elm.trigger($.modal.OPEN, [this._ctx()]);
     },
 
